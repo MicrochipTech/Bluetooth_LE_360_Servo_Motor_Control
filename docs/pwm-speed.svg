@@ -1,17 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="560" viewBox="0 0 1100 560" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="600" viewBox="0 0 1100 600" role="img" aria-labelledby="title desc">
   <title id="title">Continuous-rotation servo: speed and direction encoded as pulse width</title>
-  <desc id="desc">Three pulses shown on a common 20 millisecond time scale. While started, maximum CW commands 0.5 milliseconds at 2.5 percent duty, neutral commands 1.5 milliseconds at 7.5 percent, and maximum CCW commands 2.5 milliseconds at 12.5 percent. Stop or a zero speed setting commands neutral. The period remains 20 milliseconds, or 50 hertz.</desc>
+  <desc id="desc">The MBD slider controls the speed command from 0 to 100 in either selected direction, CW or CCW. Direction is selected separately. START applies the setting and STOP commands neutral. Tested hardware: Tower Pro MG996R 360-degree continuous-rotation variant, operated at 5 V. Three pulses shown on a common 20 millisecond time scale. While started, maximum CW commands 0.5 milliseconds at 2.5 percent duty, neutral commands 1.5 milliseconds at 7.5 percent, and maximum CCW commands 2.5 milliseconds at 12.5 percent. Stop or a zero speed setting commands neutral. The period remains 20 milliseconds, or 50 hertz.</desc>
   <defs>
     <linearGradient id="bg" x2="1" y2="1">
       <stop stop-color="#101e38"/>
       <stop offset="1" stop-color="#172b4b"/>
     </linearGradient>
   </defs>
-  <rect width="1100" height="560" rx="24" fill="url(#bg)"/>
+  <rect width="1100" height="600" rx="24" fill="url(#bg)"/>
   <g font-family="Segoe UI, Arial, sans-serif">
     <text x="40" y="46" fill="#67e8f9" font-size="14" font-weight="700" letter-spacing="3">BLUETOOTH LE + ZEPHYR</text>
     <text x="40" y="93" fill="#f8fafc" font-size="34" font-weight="700">360-degree servo: command the rotation</text>
-    <text x="40" y="126" fill="#cbd5e1" font-size="18">Choose speed and direction. START applies them; STOP commands neutral.</text>
+    <text x="40" y="126" fill="#cbd5e1" font-size="18">MBD slider: speed 0-100 in either selected direction. START runs; STOP commands neutral.</text>
     <rect x="40" y="150" width="1020" height="48" rx="12" fill="#233b5b"/>
     <text x="61" y="180" fill="#f8fafc" font-size="17">20 ms / 50 Hz</text>
     <text x="320" y="180" fill="#f8fafc" font-size="17">Speed command 0-100</text>
@@ -46,5 +46,6 @@
       <text x="348" y="428" fill="#fde68a">Maximum CCW command while STARTED</text>
     </g>
     <text x="40" y="531" fill="#cbd5e1" font-size="15">Speed is not RPM. Neutral and physical direction depend on the servo. BLE disconnect does not stop it.</text>
+    <text x="40" y="575" fill="#67e8f9" font-size="17" font-weight="600">Tested servo: Tower Pro MG996R - 360-degree continuous-rotation variant - operated at 5 V</text>
   </g>
 </svg>

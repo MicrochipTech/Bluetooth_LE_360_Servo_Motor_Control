@@ -10,7 +10,14 @@ PIC32-BZ6 Curiosity &nbsp; | &nbsp; Bluetooth LE &nbsp; | &nbsp; 50 Hz PWM &nbsp
 
 </div>
 
-![Continuous-rotation servo PWM: a constant 20 ms period, 0.5 ms for the maximum CW command, 1.5 ms for neutral, and 2.5 ms for the maximum CCW command.](docs/pwm-speed.svg)
+![MBD slider controls speed from 0 to 100 in either selected direction, CW or CCW. START runs and STOP commands neutral. Tested with a Tower Pro MG996R 360-degree servo at 5 V.](docs/pwm-speed.svg)
+
+> **Speed control in both directions:** Move the MBD slider to set the rotation
+> speed command from **0 to 100** in either **CW or CCW**. Select direction
+> separately, then use **START/STOP** to run or stop. Speed **0** commands neutral;
+> the scale is **not measured RPM**.
+>
+> **Tested hardware:** Tower Pro **MG996R 360° continuous-rotation servo**, operated at **5 V**.
 
 ## Disclaimer
 
@@ -94,7 +101,7 @@ flowchart LR
 | Item | Quantity | Notes |
 | :-- | :--: | :-- |
 | [PIC32-BZ6 Curiosity board](https://www.microchip.com/en-us/development-tool/ev31u42a) | 1 | Target: `pic32wm_bz6204_curiosity/pic32cx2051bz62132` |
-| Compatible 360° continuous-rotation servo | 1 | Verify supply, signal-level, neutral pulse, and current requirements |
+| Tower Pro MG996R 360° continuous-rotation servo | 1 | Tested at **5 V**; verify the exact unit's supply, signal-level, neutral pulse, and current requirements |
 | USB data cable | 1 | Board programming and serial connection |
 | Jumper wires | 3 | Signal, supply, and ground |
 | BLE-capable phone with MBD | 1 | A version supporting the servo command interface |
