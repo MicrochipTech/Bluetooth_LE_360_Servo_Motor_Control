@@ -1,0 +1,89 @@
+/*
+ * PWM LED Configuration for pic32wm_bz6204_curiosity
+ * 
+ * This overlay file configures the RGB LEDs as PWM-controlled LEDs
+ * All LEDs use TCC0 (Timer Counter Channel 0)
+ * Red LED:   TCC0_WO1
+ * Green LED: TCC0_WO2
+ * Blue LED:  TCC0_WO4
+ */
+
+/ {
+	servo: servo {
+        compatible = "pwm-servo";
+        pwms = <&tcc1 1 20000000 0>;
+        min-pulse = <500000>;
+        max-pulse = <2500000>;
+    		};
+
+	leds {
+		compatible = "gpio-leds";
+		led3: led_3 {
+			gpios = <&portb 7 GPIO_ACTIVE_LOW>;
+			label = "User LED 1";
+		};
+	};
+
+	pwmleds {
+		compatible = "pwm-leds";
+		status = "okay";
+		red_pwm_led: red_pwm_led {
+			status = "okay";
+			pwms = <&tcc0 1 PWM_MSEC(20) 0>;
+		};
+
+		green_pwm_led: green_pwm_led {
+			status = "okay";
+			pwms = <&tcc0 2 PWM_MSEC(20) 0>;
+		};
+
+		blue_pwm_led: blue_pwm_led {
+			status = "okay";
+			pwms = <&tcc0 4 PWM_MSEC(20) 0>;
+		};
+
+		servo_pwm: servo_pwm {
+			status = "okay";
+			pwms = <&tcc1 1 PWM_MSEC(20) 0>;
+		};
+	};
+
+	aliases {
+		led3 = &led3;
+		pwm-led-red = &red_pwm_led;
+		pwm-led-green = &green_pwm_led;
+		pwm-led-blue = &blue_pwm_led;
+		pwm-servo = &servo_pwm;
+	};
+};
+
+&pinctrl {
+	tcc0_pwm_rgb: tcc0_pwm_rgb {
+		group1 {
+			pinmux = <PC7_TCC0WO1_OUT>,
+				<PC10_TCC0WO2_OUT>,
+				<PE0_TCC0WO4_OUT>;
+		};
+	};
+
+	tcc1_pwm_servo: tcc1_pwm_servo {
+        group1 {
+            pinmux = <PC11_TCC1WO1_OUT>;
+        };
+    };
+};
+/* Enable timer/counter modules for PWM */
+
+&tcc0 {
+	status = "okay";
+	pinctrl-0 = <&tcc0_pwm_rgb>;
+	pinctrl-names = "default";
+};
+
+&tcc1 {
+    status = "okay";
+    pinctrl-0 = <&tcc1_pwm_servo>;
+    pinctrl-names = "default";
+    prescaler = <256>;
+};
+

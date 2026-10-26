@@ -1,0 +1,15 @@
+# Copyright (c) 2025 Microchip Technology Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+mainmenu "Bluetooth: Peripheral TRP UART"
+
+# Servo motor type fixed for this project
+config APP_SERVO_MOTOR_180
+  bool
+  default n
+
+config APP_SERVO_MOTOR_360
+  bool
+  default y
+
+source "Kconfig.zephyr"
