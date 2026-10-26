@@ -373,7 +373,7 @@ sequenceDiagram
     participant T as Released TRS
     participant A as Servo application
     participant P as PWM / servo
-    Note over M,T: Connected; CP notifications enabled; initially STOPPED
+    Note over M,T: Connected, CP notifications enabled, initially STOPPED
     M->>T: CP write: 8E 03 A2 00 19 (speed 25)
     T->>A: Vendor-command event
     A-->>M: ACK D2 + response B2 (through TRS)
@@ -384,7 +384,7 @@ sequenceDiagram
     M->>T: CP write: 8E 02 A5 01 (START)
     T->>A: Vendor-command event
     A-->>M: ACK D5 (through TRS)
-    A->>P: 20 ms period; 1212.5 us high
+    A->>P: 20 ms period, 1212.5 us high
     A-->>M: Response B5: START (through TRS)
     M->>T: CP write: 8E 02 A5 00 (STOP)
     T->>A: Vendor-command event
