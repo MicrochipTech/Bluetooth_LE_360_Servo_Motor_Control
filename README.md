@@ -1,4 +1,4 @@
-<img align="right" width="96" src="https://raw.githubusercontent.com/MicrochipTech/PIC32BZ6_Bluetooth_LE_Servo_Motor_Control/main/docs/IoT-Made-Easy-Logo.png" alt="IoT Made Easy logo">
+<img align="right" width="96" src="docs/IoT-Made-Easy-Logo.png" alt="IoT Made Easy logo">
 
 <div align="center">
 
