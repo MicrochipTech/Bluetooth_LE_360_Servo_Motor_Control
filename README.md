@@ -89,10 +89,12 @@ this firmware does not track position or implement end-of-travel detection.
 | :-- | :--: | :-- |
 | [PIC32-BZ6 Curiosity board](https://www.microchip.com/en-us/development-tool/ev31u42a) | 1 | Only supported board: `pic32wm_bz6204_curiosity/pic32cx2051bz62132` |
 | Tower Pro MG996R 360° continuous-rotation servo | 1 | Tested at **5 V**; verify the exact unit's supply, signal-level, neutral pulse, and current requirements |
-| USB data cable | 1 | Board programming and serial connection |
-| Jumper wires | 3 | Signal, supply, and ground |
-| BLE-capable phone with MBD | 1 | A version supporting the servo command interface |
-| Suitable regulated servo supply | As needed | Use an external supply if the board's available current is insufficient |
+
+> 📌 **Important — Servo power supply**
+>
+> Use a suitable regulated external servo supply if the board's available current
+> is insufficient. Verify the servo's current requirements, including stall
+> current, and connect the external supply ground to board ground.
 
 Model names alone do not establish that a servo is continuous-rotation; confirm
 the exact variant. For position control, use the
@@ -100,7 +102,7 @@ the exact variant. For position control, use the
 
 ### Wiring
 
-**The 180° and 360° demos use the same three-wire connection on mikroBUS header 2.**
+**Connect the 360° continuous-rotation servo to mikroBUS header 2 as shown below.**
 The setup used here takes PWM, 5 V, and GND from that header.
 
 | PIC32-BZ6 Curiosity connection | Servo connection | Purpose |
@@ -153,9 +155,8 @@ using either of the two supported workflows:
 - **Command line (CLI):** Follow the [command-line setup instructions](https://github.com/Zephyr4Microchip/zephyr-wireless#legacy-command-line).
 
 Use those guides for host tools, workspace and SDK installation, Microchip
-libraries, OpenOCD, and programmer-mode setup. Use the TRP revision listed in
-[application configuration](#43-application-configuration) and SDK **0.17.4**
-for this application.
+libraries, OpenOCD, and programmer-mode setup. Use a Zephyr checkout containing
+the released TRP service/server and SDK **0.17.4** for this application.
 
 **Supported board:** PIC32-BZ6 Curiosity only — **`pic32wm_bz6204_curiosity`**.
 
@@ -175,17 +176,15 @@ steps.
 
 #### Clone into the workspace
 
-From an **initialized workspace using the pinned Zephyr checkout**, synchronize
-the dependencies and obtain the required Microchip blobs:
+After completing the setup prerequisites, clone the application from your
+workspace's `applications` directory:
 
 ```powershell
-west update
-west blobs fetch hal_microchip
-git clone https://github.com/MicrochipTech/Bluetooth_LE_360_Servo_Motor_Control.git applications\Bluetooth_LE_360_Servo_Motor_Control
+git clone https://github.com/MicrochipTech/Bluetooth_LE_360_Servo_Motor_Control.git
 ```
 
 Run these commands in the intended workspace, not an unrelated shared workspace.
-Its manifest must refer to the pinned release. The application repository alone
+The application repository alone
 does not contain Zephyr, its modules, or the toolchain.
 
 > 💡 **Tip**
@@ -216,16 +215,6 @@ using the [released Transparent UART sample](https://github.com/Zephyr4Microchip
 It uses the TRP service/server for BLE communication and adds the **360° servo
 command interface and PWM speed, direction, and start/stop control**.
 
-| TRP source baseline | Version / revision |
-| :-- | :-- |
-| Zephyr version | **4.2.0** |
-| Microchip branch | **`mchp_pic32cxbz_v420`** |
-| Exact revision used | **`bb83b6cd729c963eb5fee17caa26ef33aba5332a`** |
-
-The TRP revision used here is a branch commit, not a tagged release. The older
-`pic32cxbz_v420_v1.2.0` tag does not include this TRP implementation; use the
-revision above to reproduce this application.
-
 Zephyr uses Kconfig for features, devicetree for routing, and its PWM API for
 pulse updates.
 
@@ -255,15 +244,15 @@ Persistent bond storage is not enabled.
 #### Workbench
 
 Follow [Build the application in Workbench](https://github.com/Zephyr4Microchip/zephyr-wireless/blob/main/docs/Workbench_for_Zephyr.md#step8)
-using the board and SDK selected during import. Select the pinned Zephyr
-checkout documented in [Application configuration](#43-application-configuration).
+using the board and SDK selected during import. Select a Zephyr checkout
+containing the released TRP service/server.
 
 #### CLI
 
 Refer to [Zephyr Wireless — Building sample applications](https://github.com/Zephyr4Microchip/zephyr-wireless#3-building-sample-applications).
 For this repository, use the following board and source path.
 
-From the workspace root with the pinned checkout selected:
+From the initialized workspace root:
 
 ```powershell
 west build -b pic32wm_bz6204_curiosity/pic32cx2051bz62132 -d applications\Bluetooth_LE_360_Servo_Motor_Control\build\released applications\Bluetooth_LE_360_Servo_Motor_Control
