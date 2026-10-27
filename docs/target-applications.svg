@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="910" viewBox="0 0 1200 910" role="img" aria-labelledby="title desc">
   <title id="title">Target applications for wireless continuous-rotation servo control</title>
-  <desc id="desc">An MBD phone controls a wireless MCU and a continuous-rotation servo. Three potential end products are a tabletop rover drive, a rotating display, and a miniature conveyor. The slider commands speed from 0 to 100 in either separately selected direction, with START and STOP controls. These are integration ideas, not validated complete products.</desc>
+  <desc id="desc">An MBD phone controls a wireless MCU and a continuous-rotation servo. Six potential end products are a tabletop rover drive, rotating display, miniature conveyor, model winch, kinetic sculpture, and camera slider drive. The slider commands speed from 0 to 100 in either separately selected direction, with START and STOP controls. These are integration ideas, not validated complete products.</desc>
   <defs>
     <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#0b162b"/><stop offset="1" stop-color="#173553"/></linearGradient>
     <linearGradient id="accent"><stop stop-color="#38bdf8"/><stop offset="1" stop-color="#fbbf24"/></linearGradient>
   </defs>
-  <rect width="1200" height="650" rx="26" fill="url(#bg)"/>
+  <rect width="1200" height="910" rx="26" fill="url(#bg)"/>
   <circle cx="1130" cy="50" r="180" fill="#fbbf24" opacity=".04"/>
   <g font-family="Segoe UI, Arial, sans-serif">
     <text x="44" y="46" fill="#67e8f9" font-size="14" font-weight="700" letter-spacing="3">TARGET APPLICATIONS / CONTINUOUS ROTATION</text>
@@ -37,8 +37,22 @@
     <g fill="#b9cddd" font-size="16" text-anchor="middle">
       <text x="220" y="500">Control a wheel-drive actuator</text><text x="600" y="500">Choose rotation speed and direction</text><text x="980" y="500">Run or stop a small belt drive</text>
     </g>
-    <rect x="44" y="553" width="1112" height="46" rx="12" fill="#244761"/>
-    <text x="600" y="583" fill="#fde68a" font-size="20" font-weight="700" text-anchor="middle">SPEED SLIDER 0-100  |  SELECT CW / CCW  |  START / STOP  |  NOT MEASURED RPM</text>
-    <text x="44" y="629" fill="#a6bdce" font-size="14">Potential integrations only. Add suitable safety controls: BLE disconnect does not automatically stop this demo.</text>
+    <g fill="#132a43" stroke="#31516d">
+      <rect x="44" y="556" width="352" height="232" rx="18"/><rect x="424" y="556" width="352" height="232" rx="18"/><rect x="804" y="556" width="352" height="232" rx="18"/>
+    </g>
+    <g fill="none" stroke="#67e8f9" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="198" cy="638" rx="19" ry="33"/><ellipse cx="248" cy="638" rx="19" ry="33"/><path d="M198 605H248M198 671H248M248 638H287V678M176 681H269"/>
+      <circle cx="600" cy="636" r="12"/><path d="M600 624V598M612 636H638M600 648V674M588 636H562M600 674V691M567 693H633"/>
+      <path d="M902 669H1056M902 684H1056M920 670V684M1038 670V684"/><rect x="962" y="625" width="44" height="43" rx="5"/><path d="M1006 637L1024 629V656L1006 650M939 606H1025M1015 598L1025 606L1015 614"/>
+    </g>
+    <g fill="#f8fafc" font-size="23" font-weight="700" text-anchor="middle">
+      <text x="220" y="725">Model winch</text><text x="600" y="725">Kinetic sculpture</text><text x="980" y="725">Camera slider drive</text>
+    </g>
+    <g fill="#b9cddd" font-size="16" text-anchor="middle">
+      <text x="220" y="756">Wind or unwind a small spool</text><text x="600" y="756">Animate a rotating art mechanism</text><text x="980" y="756">Drive a belt-linked camera carriage</text>
+    </g>
+    <rect x="44" y="813" width="1112" height="46" rx="12" fill="#244761"/>
+    <text x="600" y="843" fill="#fde68a" font-size="20" font-weight="700" text-anchor="middle">SPEED SLIDER 0-100  |  SELECT CW / CCW  |  START / STOP  |  NOT MEASURED RPM</text>
+    <text x="44" y="889" fill="#a6bdce" font-size="14">Potential integrations only. Add suitable safety controls: BLE disconnect does not automatically stop this demo.</text>
   </g>
 </svg>
