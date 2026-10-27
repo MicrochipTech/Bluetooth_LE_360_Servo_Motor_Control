@@ -1,11 +1,9 @@
 sample:
-  name: Peripheral Transparent Uart
-  description: This application enables users to send data back and forth over UART between two connected BLE devices.
+  name: Bluetooth LE 360-degree Servo Motor Control
+  description: Control a continuous-rotation servo over Bluetooth LE on the PIC32-BZ6 Curiosity board.
   tags: bluetooth
 tests:
   build:
-    platform_allow::
-      - wbz451_curiosity/pic32cx1012bz25048
-      - wbz351_curiosity/pic32cx5109bz31048
+    platform_allow:
       - pic32wm_bz6204_curiosity/pic32cx2051bz62132
     tags: bluetooth
