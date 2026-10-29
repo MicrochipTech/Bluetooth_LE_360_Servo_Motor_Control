@@ -1,35 +1,32 @@
-<img align="right" width="96" src="docs/IoT-Made-Easy-Logo.png" alt="IoT Made Easy logo">
-
 <div align="center">
 
-# Bluetooth LE 360° Servo Motor Control
+<h1>Bluetooth LE 360° Servo Motor Control</h1>
 
-**Wireless speed and direction. Powered by Zephyr.**
+<p><strong>Wireless speed and direction. Powered by Zephyr.</strong></p>
 
-Wireless MCU &nbsp; | &nbsp; Bluetooth LE &nbsp; | &nbsp; 50 Hz PWM &nbsp; | &nbsp; CW / CCW
+<p>Wireless MCU &nbsp; | &nbsp; Bluetooth LE &nbsp; | &nbsp; 50 Hz PWM &nbsp; | &nbsp; CW / CCW</p>
 
-[Set up Zephyr](#41-prerequisites) · [Import](#42-import-the-application) · [Build](#44-build-the-application) · [Flash](#45-program-the-board) · [Run with MBD](#6-demo-setup-and-operation)
+<p><a href="#31-prerequisites">Set up Zephyr</a> · <a href="#32-import-the-application">Import</a> · <a href="#34-build-the-application">Build</a> · <a href="#35-program-the-board">Flash</a> · <a href="#5-demo-setup-and-operation">Run with MBD</a></p>
 
 </div>
 
 **Contents**
 
 1. [Introduction](#1-introduction)
-2. [Target Segments and Applications](#2-target-segments-and-applications)
-3. [Hardware Setup](#3-hardware-setup)
-4. [Zephyr Software Setup](#4-zephyr-software-setup)
-   - [Prerequisites](#41-prerequisites)
-   - [Import the application](#42-import-the-application)
-   - [Application configuration](#43-application-configuration)
-   - [Build](#44-build-the-application)
-   - [Program](#45-program-the-board)
-   - [File structure](#46-file-structure)
-5. [Application Architecture and Control Principles](#5-application-architecture-and-control-principles)
-   - [Control architecture](#51-control-architecture)
-   - [BLE data flow and commands](#52-ble-data-flow-and-commands)
-   - [PWM and motor control](#53-pwm-and-motor-control)
-6. [Demo Setup and Operation](#6-demo-setup-and-operation)
-7. [Validation and Troubleshooting](#7-validation-and-troubleshooting)
+2. [Hardware Setup](#2-hardware-setup)
+3. [Zephyr Software Setup](#3-zephyr-software-setup)
+   - [Prerequisites](#31-prerequisites)
+   - [Import the application](#32-import-the-application)
+   - [Application configuration](#33-application-configuration)
+   - [Build](#34-build-the-application)
+   - [Program](#35-program-the-board)
+   - [File structure](#36-file-structure)
+4. [Application Architecture and Control Principles](#4-application-architecture-and-control-principles)
+   - [Control architecture](#41-control-architecture)
+   - [BLE data flow and commands](#42-ble-data-flow-and-commands)
+   - [PWM and motor control](#43-pwm-and-motor-control)
+5. [Demo Setup and Operation](#5-demo-setup-and-operation)
+6. [Validation and Troubleshooting](#6-validation-and-troubleshooting)
 
 
 ## 1. Introduction
@@ -55,40 +52,14 @@ before use. Firmware speed values are commands, not measured RPM.
 [Microchip technical support](https://www.microchip.com/en-us/support) ·
 [Companion 180° application](https://github.com/MicrochipTech/Bluetooth_LE_180_Servo_Motor_Control)
 
-## 2. Target Segments and Applications
-
-![Six target applications: tabletop rover drive, rotating display, miniature conveyor, model winch, kinetic sculpture, and camera slider drive. MBD commands a wireless MCU and continuous-rotation servo through a generic PWM pin.](docs/target-applications.svg)
-
-### Potential end products
-
-| Target application | What continuous rotation enables |
-| :-- | :-- |
-| Tabletop rover drive | Control a wheel-drive actuator's speed setting and direction |
-| Rotating display | Run a turntable in either direction at an adjustable speed setting |
-| Miniature conveyor | Start, stop, and reverse a small belt-drive mechanism |
-| Model winch | Wind or unwind a small spool with suitable travel limits |
-| Kinetic sculpture | Animate a rotating art mechanism |
-| Camera slider drive | Drive a belt-linked camera carriage with suitable end stops |
-
-These are **integration ideas**, not validated complete products. The demo
-controls one servo, not a complete multi-wheel rover. Product mechanics, power,
-and independent safety controls must be designed separately.
-Travel-limited mechanisms need independent limit switches and stopping controls;
-this firmware does not track position or implement end-of-travel detection.
-
-> 📌 **Important**
->
-> **360° describes continuous rotation, not an angle command.** This firmware
-> does not position the shaft at a requested angle or measure its speed.
-
-## 3. Hardware Setup
+## 2. Hardware Setup
 
 ### Bill of materials
 
 | Item | Quantity | Notes |
 | :-- | :--: | :-- |
 | [PIC32-BZ6 Curiosity board](https://www.microchip.com/en-us/development-tool/ev31u42a) | 1 | Only supported board: `pic32wm_bz6204_curiosity/pic32cx2051bz62132` |
-| Tower Pro MG996R 360° continuous-rotation servo | 1 | Tested at **5 V**; verify the exact unit's supply, signal-level, neutral pulse, and current requirements |
+| [Tower Pro MG996R 360° continuous-rotation servo](https://a.co/d/0atOquoq) | 1 | Tested at **5 V**; verify the exact unit's supply, signal-level, neutral pulse, and current requirements |
 
 > 📌 **Important — Servo power supply**
 >
@@ -104,6 +75,8 @@ the exact variant. For position control, use the
 
 **Connect the 360° continuous-rotation servo to mikroBUS header 2 as shown below.**
 The setup used here takes PWM, 5 V, and GND from that header.
+
+<p align="center"><img src="docs/servo-360-hardware.png" alt="PIC32-BZ6 Curiosity board wired to the 360° continuous-rotation servo" width="100%"></p>
 
 | PIC32-BZ6 Curiosity connection | Servo connection | Purpose |
 | :-- | :-- | :-- |
@@ -144,9 +117,9 @@ wire colors are not a reliable specification. Start with the servo unloaded and
 the rotating parts clear. Hardware photos can be added alongside these diagrams
 without changing the documented pin mapping.
 
-## 4. Zephyr Software Setup
+## 3. Zephyr Software Setup
 
-### 4.1 Prerequisites
+### 3.1 Prerequisites
 
 Complete the [Zephyr Wireless environment setup](https://github.com/Zephyr4Microchip/zephyr-wireless#2-environment-setup)
 using either of the two supported workflows:
@@ -172,7 +145,7 @@ steps.
 - [Zephyr PWM API](https://docs.zephyrproject.org/4.2.0/hardware/peripherals/pwm.html) — pulse-generation API used by the servo application.
 - [Microchip Transparent UART testing guide](https://onlinedocs.microchip.com/oxy/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-11/GUID-07EC83B7-CC28-4C55-8634-4B7F56A9DB36.html) — transport testing reference.
 
-### 4.2 Import the application
+### 3.2 Import the application
 
 #### Clone into the workspace
 
@@ -203,11 +176,11 @@ Choose board **`pic32wm_bz6204_curiosity`**, SoC qualifier
 #### CLI
 
 No IDE import is required. After cloning, use the application path as the source
-argument to `west build` in [Build the application](#44-build-the-application).
+argument to `west build` in [Build the application](#34-build-the-application).
 See the [Zephyr Wireless CLI workflow](https://github.com/Zephyr4Microchip/zephyr-wireless#legacy-command-line)
 for workspace and shell setup.
 
-### 4.3 Application configuration
+### 3.3 Application configuration
 
 This application builds on the **Microchip Transparent Profile (TRP)** available
 through [Zephyr Wireless](https://github.com/Zephyr4Microchip/zephyr-wireless),
@@ -239,7 +212,7 @@ BLE is configured for one connection, a target ATT MTU of 247, and
 16 TRS receive buffers of 244 bytes. The actual MTU is negotiated with the phone.
 Persistent bond storage is not enabled.
 
-### 4.4 Build the application
+### 3.4 Build the application
 
 #### Workbench
 
@@ -263,14 +236,14 @@ precompiled image is required from this repository. When switching Zephyr
 revisions, use a new build directory or a pristine build; do not flash a stale
 image from an earlier configuration.
 
-### 4.5 Program the board
+### 3.5 Program the board
 
 #### Workbench
 
 Follow [Flash the application in Workbench](https://github.com/Zephyr4Microchip/zephyr-wireless/blob/main/docs/Workbench_for_Zephyr.md#step9)
 and select the **`openocd`** runner. OpenOCD installation and CMSIS-DAP
 programmer-mode switching are covered in the
-[setup prerequisite](#41-prerequisites), not repeated here.
+[setup prerequisite](#31-prerequisites), not repeated here.
 
 #### CLI
 
@@ -281,7 +254,7 @@ Flash the build directory produced in the previous section:
 west flash -d applications\Bluetooth_LE_360_Servo_Motor_Control\build\released --runner openocd
 ```
 
-### 4.6 File structure
+### 3.6 File structure
 
 ```text
 Bluetooth_LE_360_Servo_Motor_Control/
@@ -293,7 +266,6 @@ Bluetooth_LE_360_Servo_Motor_Control/
 |-- boards/
 |   `-- pic32wm_bz6204_curiosity.overlay
 |-- docs/
-|   |-- target-applications.svg
 |   `-- pwm-speed.svg
 `-- src/
     |-- main.c
@@ -301,9 +273,9 @@ Bluetooth_LE_360_Servo_Motor_Control/
     `-- app_servo_motor_360.h
 ```
 
-## 5. Application Architecture and Control Principles
+## 4. Application Architecture and Control Principles
 
-### 5.1 Control architecture
+### 4.1 Control architecture
 
 | At a glance | Application behavior |
 | :-- | :-- |
@@ -338,7 +310,7 @@ flowchart TB
 Diagrams show generic functional connections. The hardware table and overlay
 define the actual BZ6 pin mapping; no other board is currently supported.
 
-### 5.2 BLE data flow and commands
+### 4.2 BLE data flow and commands
 
 #### From a speed setting to rotation
 
@@ -458,7 +430,7 @@ than calling those helpers. State fields are software state, not sensor readings
 | UART-to-BLE payload size | Up to `ATT MTU - 4`: 19 bytes at MTU 23; 243 bytes at MTU 247 |
 | Temporary TX backpressure | Pending UART data retried; TX-open and CBFC-credit events restart the pump |
 
-### 5.3 PWM and motor control
+### 4.3 PWM and motor control
 
 #### How PWM controls speed and direction
 
@@ -530,10 +502,11 @@ the new setting without requesting rotation. START applies the stored setting.
 > position mapping. Servo neutral/deadband and usable limits require calibration;
 > a 1500 us command may not perfectly stop every continuous-rotation servo.
 
-## 6. Demo Setup and Operation
+## 5. Demo Setup and Operation
 
-The table describes the firmware-facing workflow. Exact MBD menu names and
-screenshots depend on the app version and can be added with the demo images.
+The demo below shows the 360° servo responding to wireless speed and direction commands.
+
+https://github.com/user-attachments/assets/9f4178e1-8720-4abf-9e37-7ad25ca55561
 
 | Step | Action in the setup / MBD app | Expected firmware behavior |
 | :--: | :-- | :-- |
@@ -557,7 +530,7 @@ commands. Use hexadecimal byte writes, not ASCII text. The UI-update request is
 > emergency-stop mechanism. Provide a suitable independent power-disconnect
 > method for the test setup.
 
-## 7. Validation and Troubleshooting
+## 6. Validation and Troubleshooting
 
 **The migrated application has been built, flashed, and reported working on
 PIC32-BZ6 hardware.** This is a functional result, not a claim that every stress
