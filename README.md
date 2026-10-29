@@ -321,23 +321,25 @@ sequenceDiagram
     participant A as Servo application
     participant P as PWM / servo
     Note over M,T: Connected, CP notifications enabled, initially STOPPED
-    M->>T: CP write: 8E 03 A2 00 19 (speed 25)
+    M->>T: Slider Set: speed 25
     T->>A: Vendor-command event
-    A-->>M: ACK D2 + response B2 (through TRS)
+    A-->>M: Control Response: Slider Set accepted (through TRS)
+    A-->>M: Slider Set Response: speed 25 (through TRS)
     A->>P: Still neutral: 1500 us
-    M->>T: CP write: 8E 02 A4 00 (CW)
+    M->>T: Fixed Direction Set: CW
     T->>A: Vendor-command event
-    A-->>M: ACK D4 + response B4 (through TRS)
-    M->>T: CP write: 8E 02 A5 01 (START)
+    A-->>M: Control Response: Fixed Direction Set accepted (through TRS)
+    A-->>M: Fixed Direction Set Response: CW (through TRS)
+    M->>T: START/STOP Set: START
     T->>A: Vendor-command event
-    A-->>M: ACK D5 (through TRS)
+    A-->>M: Control Response: START/STOP Set accepted (through TRS)
     A->>P: 20 ms period, 1212.5 us high
-    A-->>M: Response B5: START (through TRS)
-    M->>T: CP write: 8E 02 A5 00 (STOP)
+    A-->>M: START/STOP Set Response: START (through TRS)
+    M->>T: START/STOP Set: STOP
     T->>A: Vendor-command event
-    A-->>M: ACK D5 (through TRS)
+    A-->>M: Control Response: START/STOP Set accepted (through TRS)
     A->>P: Neutral: 1500 us
-    A-->>M: Response B5: STOP (through TRS)
+    A-->>M: START/STOP Set Response: STOP (through TRS)
 ```
 
 ACK means the request reached the application path; it is **not** measured speed
