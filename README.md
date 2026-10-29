@@ -285,16 +285,15 @@ Bluetooth_LE_360_Servo_Motor_Control/
 | Feedback | Command ACKs and software-state responses; no speed sensor |
 
 ```mermaid
-flowchart TB
-    A["MBD app<br/>Speed / direction / start-stop"]
-    subgraph BOARD["Wireless MCU · Zephyr"]
+flowchart LR
+    A["MBD app<br/>Speed, direction<br/>and start/stop"]
+    subgraph BOARD["Wireless MCU"]
         direction TB
-        B["Transparent UART service + server"] --> C["Servo state<br/>speed + direction + run"]
+        B["Transparent UART"] <--> C["Servo state<br/>speed + direction<br/>start/stop"]
         C --> D["PWM output<br/>50 Hz"]
     end
-    A -->|"Bluetooth LE command"| B
-    C -.->|"ACK + state"| A
-    D -->|"PWM pin"| E["360° continuous-rotation servo"]
+    A <-->|"BLE command / ACK + state"| B
+    D -->|"PWM pin"| E["360° continuous<br/>rotation servo"]
     style A fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
     style B fill:#eef2ff,stroke:#6366f1,color:#312e81
     style C fill:#eef2ff,stroke:#6366f1,color:#312e81
@@ -312,9 +311,11 @@ define the actual BZ6 pin mapping; no other board is currently supported.
 ```mermaid
 sequenceDiagram
     participant M as MBD app
-    participant T as Transparent UART service
-    participant A as Servo application
-    participant P as PWM / servo
+    box Wireless MCU
+        participant T as Transparent UART
+        participant A as Servo state<br/>speed + direction<br/>start/stop
+        participant P as PWM output<br/>50 Hz
+    end
     Note over M,T: Connected, CP notifications enabled, initially STOPPED
     M->>T: Slider Set: speed 25
     T->>A: Vendor-command event
