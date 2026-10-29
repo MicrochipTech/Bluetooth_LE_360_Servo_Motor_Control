@@ -49,9 +49,6 @@ This example is provided **“AS IS”** as a starting point for development and
 self-support. Verify the servo's electrical ratings and mechanical behavior
 before use. Firmware speed values are commands, not measured RPM.
 
-[Microchip technical support](https://www.microchip.com/en-us/support) ·
-[Companion 180° application](https://github.com/MicrochipTech/Bluetooth_LE_180_Servo_Motor_Control)
-
 ## 2. Hardware Setup
 
 ### Bill of materials
@@ -129,19 +126,20 @@ using either of the two supported workflows:
 
 Use those guides for host tools, workspace and SDK installation, Microchip
 libraries, OpenOCD, and programmer-mode setup. Use a Zephyr checkout containing
-the released TRP service/server and SDK **0.17.4** for this application.
+the released Transparent UART service/server and SDK **0.17.4** for this
+application.
 
 **Supported board:** PIC32-BZ6 Curiosity only — **`pic32wm_bz6204_curiosity`**.
 
 #### Setup guide and supporting references
 
-Complete the environment setup before importing the application. The TRP,
-PWM, and testing links below are supporting references, not extra installation
-steps.
+Complete the environment setup before importing the application. The Transparent
+UART, PWM, and testing links below are supporting references, not extra
+installation steps.
 
 - [Microchip Workbench for Zephyr guide](https://github.com/Zephyr4Microchip/zephyr-wireless/blob/main/docs/Workbench_for_Zephyr.md) — setup, CMSIS-DAP switching, import, build, and flash.
-- [Released Transparent UART sample](https://github.com/Zephyr4Microchip/zephyr/tree/bb83b6cd729c963eb5fee17caa26ef33aba5332a/samples/bluetooth/peripheral_trp_uart) — TRP application baseline.
-- [Released TRS subsystem](https://github.com/Zephyr4Microchip/zephyr/tree/bb83b6cd729c963eb5fee17caa26ef33aba5332a/subsys/bluetooth/services/trs) — BLE service and server implementation.
+- [Transparent UART sample](https://github.com/Zephyr4Microchip/zephyr/tree/bb83b6cd729c963eb5fee17caa26ef33aba5332a/samples/bluetooth/peripheral_trp_uart) — application baseline.
+- [Transparent UART service and server](https://github.com/Zephyr4Microchip/zephyr/tree/bb83b6cd729c963eb5fee17caa26ef33aba5332a/subsys/bluetooth/services/trs) — BLE implementation.
 - [Zephyr PWM API](https://docs.zephyrproject.org/4.2.0/hardware/peripherals/pwm.html) — pulse-generation API used by the servo application.
 - [Microchip Transparent UART testing guide](https://onlinedocs.microchip.com/oxy/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-11/GUID-07EC83B7-CC28-4C55-8634-4B7F56A9DB36.html) — transport testing reference.
 
@@ -163,8 +161,9 @@ does not contain Zephyr, its modules, or the toolchain.
 > 💡 **Tip**
 >
 > The branch name alone is not enough: an older local checkout of the same branch
-> may not contain the released TRS subsystem. Check the commit and ensure your
-> build selects that checkout if multiple Zephyr packages are installed.
+> may not contain the released Transparent UART service/server. Check the commit
+> and ensure your build selects that checkout if multiple Zephyr packages are
+> installed.
 
 #### Workbench
 
@@ -182,34 +181,30 @@ for workspace and shell setup.
 
 ### 3.3 Application configuration
 
-This application builds on the **Microchip Transparent Profile (TRP)** available
+This application builds on **Transparent UART** available
 through [Zephyr Wireless](https://github.com/Zephyr4Microchip/zephyr-wireless),
-using the [released Transparent UART sample](https://github.com/Zephyr4Microchip/zephyr/tree/bb83b6cd729c963eb5fee17caa26ef33aba5332a/samples/bluetooth/peripheral_trp_uart).
-It uses the TRP service/server for BLE communication and adds the **360° servo
-command interface and PWM speed, direction, and start/stop control**.
+using the [Transparent UART sample](https://github.com/Zephyr4Microchip/zephyr/tree/bb83b6cd729c963eb5fee17caa26ef33aba5332a/samples/bluetooth/peripheral_trp_uart).
+It uses the Transparent UART service/server for BLE communication and adds the
+**360° servo command interface and PWM speed, direction, and start/stop control**.
 
 Zephyr uses Kconfig for features, devicetree for routing, and its PWM API for
 pulse updates.
 
 | Layer | Configuration / source | Role |
 | :-- | :-- | :-- |
-| BLE + released TRS | [prj.conf](prj.conf) | Enables Bluetooth peripheral, TRS service/server, dynamic GATT, and buffers |
+| BLE + Transparent UART | [prj.conf](prj.conf) | Enables the Bluetooth peripheral, Transparent UART service/server, dynamic GATT, and buffers |
 | Servo type | [Kconfig](Kconfig) | Selects the 360° application |
 | PWM route | [BZ6 board overlay](boards/pic32wm_bz6204_curiosity.overlay) | `pwm-servo` alias, TCC1 channel 1, PC11, 20,000,000 ns period |
-| Command integration | [main.c](src/main.c) | Advertising, TRS event dispatch, UART bridge, and servo command forwarding |
+| Command integration | [main.c](src/main.c) | Advertising, Transparent UART event dispatch and serial bridge, and servo command forwarding |
 | Speed-to-pulse mapping | [Servo implementation](src/app_servo_motor_360.c) | State/range validation, ACKs/responses, and `pwm_set_dt()` |
 | Command definitions | [Servo header](src/app_servo_motor_360.h) | Opcodes, request/response IDs, direction, and start/stop values |
 
-```ini
-CONFIG_BT_TRS=y
-CONFIG_BT_TRS_SERVER=y
-CONFIG_BT_GATT_DYNAMIC_DB=y
-CONFIG_GPIO=y
-CONFIG_PWM=y
-```
+The configuration enables the Bluetooth peripheral, Transparent UART
+service/server, dynamic GATT database, GPIO, and PWM.
 
 BLE is configured for one connection, a target ATT MTU of 247, and
-16 TRS receive buffers of 244 bytes. The actual MTU is negotiated with the phone.
+16 Transparent UART receive buffers of 244 bytes. The actual MTU is negotiated
+with the phone.
 Persistent bond storage is not enabled.
 
 ### 3.4 Build the application
@@ -218,7 +213,7 @@ Persistent bond storage is not enabled.
 
 Follow [Build the application in Workbench](https://github.com/Zephyr4Microchip/zephyr-wireless/blob/main/docs/Workbench_for_Zephyr.md#step8)
 using the board and SDK selected during import. Select a Zephyr checkout
-containing the released TRP service/server.
+containing the released Transparent UART service/server.
 
 #### CLI
 
@@ -294,7 +289,7 @@ flowchart TB
     A["MBD app<br/>Speed / direction / start-stop"]
     subgraph BOARD["Wireless MCU · Zephyr"]
         direction TB
-        B["TRP service + server"] --> C["Servo state<br/>speed + direction + run"]
+        B["Transparent UART service + server"] --> C["Servo state<br/>speed + direction + run"]
         C --> D["PWM output<br/>50 Hz"]
     end
     A -->|"Bluetooth LE command"| B
@@ -317,29 +312,29 @@ define the actual BZ6 pin mapping; no other board is currently supported.
 ```mermaid
 sequenceDiagram
     participant M as MBD app
-    participant T as Released TRS
+    participant T as Transparent UART service
     participant A as Servo application
     participant P as PWM / servo
     Note over M,T: Connected, CP notifications enabled, initially STOPPED
     M->>T: Slider Set: speed 25
     T->>A: Vendor-command event
-    A-->>M: Control Response: Slider Set accepted (through TRS)
-    A-->>M: Slider Set Response: speed 25 (through TRS)
+    A-->>M: Control Response: Slider Set accepted (through Transparent UART)
+    A-->>M: Slider Set Response: speed 25 (through Transparent UART)
     A->>P: Still neutral: 1500 us
     M->>T: Fixed Direction Set: CW
     T->>A: Vendor-command event
-    A-->>M: Control Response: Fixed Direction Set accepted (through TRS)
-    A-->>M: Fixed Direction Set Response: CW (through TRS)
+    A-->>M: Control Response: Fixed Direction Set accepted (through Transparent UART)
+    A-->>M: Fixed Direction Set Response: CW (through Transparent UART)
     M->>T: START/STOP Set: START
     T->>A: Vendor-command event
-    A-->>M: Control Response: START/STOP Set accepted (through TRS)
+    A-->>M: Control Response: START/STOP Set accepted (through Transparent UART)
     A->>P: 20 ms period, 1212.5 us high
-    A-->>M: START/STOP Set Response: START (through TRS)
+    A-->>M: START/STOP Set Response: START (through Transparent UART)
     M->>T: START/STOP Set: STOP
     T->>A: Vendor-command event
-    A-->>M: Control Response: START/STOP Set accepted (through TRS)
+    A-->>M: Control Response: START/STOP Set accepted (through Transparent UART)
     A->>P: Neutral: 1500 us
-    A-->>M: START/STOP Set Response: STOP (through TRS)
+    A-->>M: START/STOP Set Response: STOP (through Transparent UART)
 ```
 
 ACK means the request reached the application path; it is **not** measured speed
@@ -359,7 +354,7 @@ behavior during validation.
 
 | Item | Value |
 | :-- | :-- |
-| TRS service | `49535343-FE7D-4AE5-8FA9-9FAFD205E455` |
+| Transparent UART service | `49535343-FE7D-4AE5-8FA9-9FAFD205E455` |
 | TX characteristic | `49535343-1E4D-4BD9-BA61-23C647249616` |
 | RX characteristic | `49535343-8841-43F4-A8D4-ECBE34729BB3` |
 | Control Point characteristic | `49535343-4C8A-39B3-2F49-511CFF073B7E` |
