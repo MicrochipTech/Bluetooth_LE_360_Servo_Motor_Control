@@ -174,8 +174,18 @@ Choose board **`pic32wm_bz6204_curiosity`**, SoC qualifier
 
 #### CLI
 
-No IDE import is required. After cloning, use the application path as the source
-argument to `west build` in [Build the application](#34-build-the-application).
+No IDE import is required. For this CLI workflow, copy the application folder or
+clone the repository inside the Zephyr checkout's `samples` directory. The build
+commands below assume it is at
+`~/zephyrproject/zephyr/samples/Bluetooth_LE_360_Servo_Motor_Control`.
+
+To clone it directly into that location:
+
+```bash
+cd ~/zephyrproject/zephyr/samples
+git clone https://github.com/MicrochipTech/Bluetooth_LE_360_Servo_Motor_Control.git
+```
+
 See the [Zephyr Wireless CLI workflow](https://github.com/Zephyr4Microchip/zephyr-wireless#legacy-command-line)
 for workspace and shell setup.
 
@@ -220,16 +230,15 @@ containing the released Transparent UART service/server.
 Refer to [Zephyr Wireless — Building sample applications](https://github.com/Zephyr4Microchip/zephyr-wireless#3-building-sample-applications).
 For this repository, use the following board and source path.
 
-From the initialized workspace root:
+From the Zephyr checkout directory:
 
-```powershell
-west build -b pic32wm_bz6204_curiosity/pic32cx2051bz62132 -d applications\Bluetooth_LE_360_Servo_Motor_Control\build\released applications\Bluetooth_LE_360_Servo_Motor_Control
+```bash
+cd ~/zephyrproject/zephyr
+west build -p always -b pic32wm_bz6204_curiosity/pic32cx2051bz62132 samples/Bluetooth_LE_360_Servo_Motor_Control
 ```
 
-Builds are generated locally under `build/`, which is ignored by Git. No
-precompiled image is required from this repository. When switching Zephyr
-revisions, use a new build directory or a pristine build; do not flash a stale
-image from an earlier configuration.
+The build output is generated under `build/`. No precompiled image is required
+from this repository.
 
 ### 3.5 Program the board
 
@@ -242,11 +251,12 @@ programmer-mode switching are covered in the
 
 #### CLI
 
-Refer to [West flashing and debugging](https://docs.zephyrproject.org/4.2.0/develop/west/build-flash-debug.html#flashing-west-flash).
-Flash the build directory produced in the previous section:
+From the Zephyr checkout directory, flash the build produced in the previous
+section:
 
-```powershell
-west flash -d applications\Bluetooth_LE_360_Servo_Motor_Control\build\released --runner openocd
+```bash
+cd ~/zephyrproject/zephyr
+west flash
 ```
 
 ### 3.6 File structure
