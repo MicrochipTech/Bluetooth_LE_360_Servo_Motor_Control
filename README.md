@@ -1,10 +1,10 @@
 <div align="center">
 
-<h1>Bluetooth LE 360° Servo Motor Control</h1>
+<h1>Bluetooth® LE 360° Servo Motor Control</h1>
 
-<p><strong>Wireless speed and direction. Powered by Zephyr.</strong></p>
+<p><strong>Wireless speed and direction control. Powered by Zephyr®.</strong></p>
 
-<p>Wireless MCU &nbsp; | &nbsp; Bluetooth LE &nbsp; | &nbsp; 50 Hz PWM &nbsp; | &nbsp; CW / CCW</p>
+<p>Wireless MCU &nbsp; | &nbsp; Bluetooth LE &nbsp; | &nbsp; Clockwise / Counterclockwise</p>
 
 <p><a href="#31-prerequisites">Set up Zephyr</a> · <a href="#32-import-the-application">Import</a> · <a href="#34-build-the-application">Build</a> · <a href="#35-program-the-board">Flash</a> · <a href="#5-demo-setup-and-operation">Run with MBD</a></p>
 
@@ -23,7 +23,7 @@
    - [File structure](#36-file-structure)
 4. [Application Architecture and Control Principles](#4-application-architecture-and-control-principles)
    - [Control architecture](#41-control-architecture)
-   - [BLE data flow and commands](#42-ble-data-flow-and-commands)
+   - [Bluetooth LE data flow and commands](#42-bluetooth-le-data-flow-and-commands)
    - [PWM and motor control](#43-pwm-and-motor-control)
 5. [Demo Setup and Operation](#5-demo-setup-and-operation)
 6. [Validation and Troubleshooting](#6-validation-and-troubleshooting)
@@ -32,9 +32,9 @@
 ## 1. Introduction
 
 Control a compatible **360° continuous-rotation servo** wirelessly from the
-Microchip Bluetooth Data (MBD) app. Choose a speed command, select clockwise or
-counterclockwise direction, and start or stop rotation. The board translates BLE
-commands into hardware-generated PWM.
+Microchip Bluetooth Data (MBD) app. Choose a speed command, select clockwise (CW)
+or counterclockwise (CCW) direction, and start or stop rotation. The board
+translates Bluetooth LE commands into hardware-generated PWM.
 
 > **Speed control in both directions:** Move the MBD slider to set the rotation
 > speed command from **0 to 100** in either **CW or CCW**. Select direction
@@ -139,7 +139,7 @@ installation steps.
 
 - [Microchip Workbench for Zephyr guide](https://github.com/Zephyr4Microchip/zephyr-wireless/blob/main/docs/Workbench_for_Zephyr.md) — setup, CMSIS-DAP switching, import, build, and flash.
 - [Transparent UART sample](https://github.com/Zephyr4Microchip/zephyr/tree/bb83b6cd729c963eb5fee17caa26ef33aba5332a/samples/bluetooth/peripheral_trp_uart) — application baseline.
-- [Transparent UART service and server](https://github.com/Zephyr4Microchip/zephyr/tree/bb83b6cd729c963eb5fee17caa26ef33aba5332a/subsys/bluetooth/services/trs) — BLE implementation.
+- [Transparent UART service and server](https://github.com/Zephyr4Microchip/zephyr/tree/bb83b6cd729c963eb5fee17caa26ef33aba5332a/subsys/bluetooth/services/trs) — Bluetooth LE implementation.
 - [Zephyr PWM API](https://docs.zephyrproject.org/4.2.0/hardware/peripherals/pwm.html) — pulse-generation API used by the servo application.
 - [Microchip Transparent UART testing guide](https://onlinedocs.microchip.com/oxy/GUID-A5330D3A-9F51-4A26-B71D-8503A493DF9C-en-US-11/GUID-07EC83B7-CC28-4C55-8634-4B7F56A9DB36.html) — transport testing reference.
 
@@ -194,7 +194,7 @@ for workspace and shell setup.
 This application builds on **Transparent UART** available
 through [Zephyr Wireless](https://github.com/Zephyr4Microchip/zephyr-wireless),
 using the [Transparent UART sample](https://github.com/Zephyr4Microchip/zephyr/tree/bb83b6cd729c963eb5fee17caa26ef33aba5332a/samples/bluetooth/peripheral_trp_uart).
-It uses the Transparent UART service/server for BLE communication and adds the
+It uses the Transparent UART service/server for Bluetooth LE communication and adds the
 **360° servo command interface and PWM speed, direction, and start/stop control**.
 
 Zephyr uses Kconfig for features, devicetree for routing, and its PWM API for
@@ -202,17 +202,17 @@ pulse updates.
 
 | Layer | Configuration / source | Role |
 | :-- | :-- | :-- |
-| BLE + Transparent UART | [prj.conf](prj.conf) | Enables the Bluetooth peripheral, Transparent UART service/server, dynamic GATT, and buffers |
+| Bluetooth LE + Transparent UART | [prj.conf](prj.conf) | Enables the Bluetooth LE peripheral, Transparent UART service/server, dynamic GATT, and buffers |
 | Servo type | [Kconfig](Kconfig) | Selects the 360° application |
 | PWM route | [BZ6 board overlay](boards/pic32wm_bz6204_curiosity.overlay) | `pwm-servo` alias, TCC1 channel 1, PC11, 20,000,000 ns period |
 | Command integration | [main.c](src/main.c) | Advertising, Transparent UART event dispatch and serial bridge, and servo command forwarding |
 | Speed-to-pulse mapping | [Servo implementation](src/app_servo_motor_360.c) | State/range validation, ACKs/responses, and `pwm_set_dt()` |
 | Command definitions | [Servo header](src/app_servo_motor_360.h) | Opcodes, request/response IDs, direction, and start/stop values |
 
-The configuration enables the Bluetooth peripheral, Transparent UART
+The configuration enables the Bluetooth LE peripheral, Transparent UART
 service/server, dynamic GATT database, GPIO, and PWM.
 
-BLE is configured for one connection, a target ATT MTU of 247, and
+Bluetooth LE is configured for one connection, a target ATT MTU of 247, and
 16 Transparent UART receive buffers of 244 bytes. The actual MTU is negotiated
 with the phone.
 Persistent bond storage is not enabled.
@@ -284,7 +284,7 @@ Bluetooth_LE_360_Servo_Motor_Control/
 
 | At a glance | Application behavior |
 | :-- | :-- |
-| BLE advertising name | `Zephyr_Servo-360` |
+| Bluetooth LE advertising name | `Zephyr_Servo-360` |
 | Servo UI name / type | `SERVO 360` / `0x01` |
 | Speed slider | Integer commands from **0 to 100**; not RPM |
 | Direction | **CW = 0**, **CCW = 1** in the firmware convention |
@@ -302,7 +302,7 @@ flowchart LR
         B["Transparent UART"] <--> C["Servo state<br/>speed + direction<br/>start/stop"]
         C --> D["PWM output<br/>50 Hz"]
     end
-    A <-->|"BLE command / ACK + state"| B
+    A <-->|"Bluetooth LE command / ACK + state"| B
     D -->|"PWM pin"| E["360° continuous<br/>rotation servo"]
     style A fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
     style B fill:#eef2ff,stroke:#6366f1,color:#312e81
@@ -314,7 +314,7 @@ flowchart LR
 Diagrams show generic functional connections. The hardware table and overlay
 define the actual BZ6 pin mapping; no other board is currently supported.
 
-### 4.2 BLE data flow and commands
+### 4.2 Bluetooth LE data flow and commands
 
 #### From a speed setting to rotation
 
@@ -377,7 +377,7 @@ Discover characteristics by UUID rather than relying on fixed ATT handles.
 
 #### Servo packet format
 
-All examples below are **hexadecimal bytes on the BLE Control Point**:
+All examples below are **hexadecimal bytes on the Bluetooth LE Control Point**:
 
 ```text
  Byte 0       Byte 1             Byte 2        Bytes 3...
@@ -435,7 +435,7 @@ than calling those helpers. State fields are software state, not sensor readings
 | UART hex line starting with `8E` | Decoded and sent to the phone through CP; not executed locally as a servo command |
 | UART line limit | 128 characters; four completed lines can be queued |
 | Oversize line / queue overflow | Line discarded or dropped with a log message |
-| UART-to-BLE payload size | Up to `ATT MTU - 4`: 19 bytes at MTU 23; 243 bytes at MTU 247 |
+| UART-to-Bluetooth LE payload size | Up to `ATT MTU - 4`: 19 bytes at MTU 23; 243 bytes at MTU 247 |
 | Temporary TX backpressure | Pending UART data retried; TX-open and CBFC-credit events restart the pump |
 
 ### 4.3 PWM and motor control
@@ -519,7 +519,7 @@ https://github.com/user-attachments/assets/9f4178e1-8720-4abf-9e37-7ad25ca55561
 | Step | Action in the setup / MBD app | Expected firmware behavior |
 | :--: | :-- | :-- |
 | 1 | Power and reset the programmed board | Neutral pulse; speed setting 50, CW, STOPPED |
-| 2 | Open MBD, scan, and connect to **`Zephyr_Servo-360`** | Board establishes one BLE connection |
+| 2 | Open MBD, scan, and connect to **`Zephyr_Servo-360`** | Board establishes one Bluetooth LE connection |
 | 3 | Open the servo controls in a compatible MBD version | UI-update exchange identifies `SERVO 360`, type `0x01`, and current software state |
 | 4 | Ensure Control Point notifications are enabled; a compatible app may manage this automatically | ACKs and servo responses can reach the phone |
 | 5 | While stopped, choose a low speed setting and direction | Setting changes; output remains neutral |
@@ -527,13 +527,13 @@ https://github.com/user-attachments/assets/9f4178e1-8720-4abf-9e37-7ad25ca55561
 | 7 | Adjust speed; stop before changing direction during initial testing | Running output follows the selected mapping |
 | 8 | Select **STOP** before ending the demo | Output returns to the 1.5 ms neutral command |
 
-For a manual BLE client, enable Control Point notifications **before** sending
+For a manual Bluetooth LE client, enable Control Point notifications **before** sending
 commands. Use hexadecimal byte writes, not ASCII text. The UI-update request is
 `8E 01 A1`; a speed-25 request is `8E 03 A2 00 19`.
 
 > ⚠️ **Warning**
 >
-> **BLE disconnection does not stop the servo.** The last PWM command remains
+> **Bluetooth LE disconnection does not stop the servo.** The last PWM command remains
 > active. STOP must be sent while connected, and radio connectivity is not an
 > emergency-stop mechanism. Provide a suitable independent power-disconnect
 > method for the test setup.
