@@ -4,7 +4,7 @@
 
 <p><strong>Wireless speed and direction control. Powered by Zephyr®.</strong></p>
 
-<p>Wireless MCU &nbsp; | &nbsp; Bluetooth LE &nbsp; | &nbsp; Clockwise / Counterclockwise</p>
+<p>Wireless MCU &nbsp; | &nbsp; Bluetooth LE &nbsp; | &nbsp; Clockwise (CW) / Counterclockwise (CCW)</p>
 
 <p><a href="#31-prerequisites">Set up Zephyr</a> · <a href="#32-import-the-application">Import</a> · <a href="#34-build-the-application">Build</a> · <a href="#35-program-the-board">Flash</a> · <a href="#5-demo-setup-and-operation">Run with MBD</a></p>
 
